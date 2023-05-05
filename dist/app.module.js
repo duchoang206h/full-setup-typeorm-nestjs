@@ -18,6 +18,12 @@ const typeorm_1 = require("@nestjs/typeorm");
 const datasource_1 = require("./database/datasource");
 const task_module_1 = require("./task/task.module");
 const schedule_1 = require("@nestjs/schedule");
+const graphql_1 = require("@nestjs/graphql");
+const apollo_1 = require("@nestjs/apollo");
+const graphql_2 = require("graphql");
+const auth_module_1 = require("./auth/auth.module");
+const config_1 = require("@nestjs/config");
+const configuration_1 = require("./config/configuration");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -26,6 +32,24 @@ AppModule = __decorate([
             typeorm_1.TypeOrmModule.forRootAsync({
                 useFactory: () => datasource_1.dataSourceOptions,
             }),
+            graphql_1.GraphQLModule.forRoot({
+                driver: apollo_1.ApolloDriver,
+                autoSchemaFile: 'schema.gql',
+                installSubscriptionHandlers: true,
+                buildSchemaOptions: {
+                    directives: [
+                        new graphql_2.GraphQLDirective({
+                            name: 'upper',
+                            locations: [graphql_2.DirectiveLocation.FIELD_DEFINITION],
+                        }),
+                    ],
+                },
+            }),
+            config_1.ConfigModule.forRoot({
+                envFilePath: `/env/${process.env.NODE_ENV}.env`,
+                isGlobal: true,
+                load: [configuration_1.default],
+            }),
             schedule_1.ScheduleModule.forRoot(),
             task_module_1.TaskModule,
             board_module_1.BoardModule,
@@ -33,6 +57,7 @@ AppModule = __decorate([
             list_module_1.ListModule,
             card_module_1.CardModule,
             task_module_1.TaskModule,
+            auth_module_1.AuthModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

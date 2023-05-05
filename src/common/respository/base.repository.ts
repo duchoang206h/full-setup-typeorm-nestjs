@@ -1,5 +1,14 @@
-import { Repository, FindOptionsWhere, FindOptionsSelect } from 'typeorm';
+import {
+  Repository,
+  FindOptionsWhere,
+  FindOptionsSelect,
+  EntityManager,
+  EntityTarget,
+  QueryRunner,
+} from 'typeorm';
 import { EntitySerializer } from '../serializer/entiry.serializer';
+import { QueryService, InjectQueryService } from '@nestjs-query/core';
+
 import {
   MAX_RETURN_RECORD,
   getMaxRecordReturn,
@@ -19,10 +28,17 @@ type PaginateOption = {
   skip: number;
   limit: number;
 };
-export abstract class BaseRepository<
+export class BaseRepository<
   TEntity,
   TSerializer extends EntitySerializer,
 > extends Repository<TEntity> {
+  constructor(
+    entity: EntityTarget<TEntity>,
+    manager: EntityManager,
+    queryRunner: QueryRunner,
+  ) {
+    super(entity, manager, queryRunner);
+  }
   async paginate(
     filter: FindOptionsWhere<TEntity>,
     select: FindOptionsSelect<TEntity>,
@@ -52,7 +68,7 @@ export abstract class BaseRepository<
       transformOptions,
     ) as TSerializer;
   }
-  transformMany(entities: TEntity[], transformOptions = {}) {
+  transformMany(entities: TEntity[], transformOptions = {}): TSerializer[] {
     return entities.map((e) => this.transform(e, transformOptions));
   }
 }

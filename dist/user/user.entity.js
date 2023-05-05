@@ -17,16 +17,17 @@ const board_entity_1 = require("../board/board.entity");
 let UserEntity = class UserEntity extends custom_entity_1.CustomEntity {
 };
 __decorate([
-    (0, class_transformer_1.Expose)(),
     (0, typeorm_1.PrimaryGeneratedColumn)({ type: 'bigint' }),
     __metadata("design:type", Number)
 ], UserEntity.prototype, "userId", void 0);
 __decorate([
-    (0, class_transformer_1.Expose)(),
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], UserEntity.prototype, "email", void 0);
 __decorate([
+    (0, class_transformer_1.Exclude)({
+        toPlainOnly: true,
+    }),
     (0, typeorm_1.Column)({ nullable: false }),
     __metadata("design:type", String)
 ], UserEntity.prototype, "password", void 0);

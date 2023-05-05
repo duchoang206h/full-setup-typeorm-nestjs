@@ -23,6 +23,7 @@ export class BoardEntity extends CustomEntity {
     referencedColumnName: 'userId',
   })
   user: UserEntity;
+  userId: number;
   @OneToMany(() => ListEntity, (list) => list.board, { onDelete: 'CASCADE' })
   lists: ListEntity[];
 }

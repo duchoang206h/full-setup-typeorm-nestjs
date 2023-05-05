@@ -15,6 +15,9 @@ const entiry_serializer_1 = require("../serializer/entiry.serializer");
 const entity_constant_1 = require("../constants/entity.constant");
 const class_transformer_1 = require("class-transformer");
 class BaseRepository extends typeorm_1.Repository {
+    constructor(entity, manager, queryRunner) {
+        super(entity, manager, queryRunner);
+    }
     paginate(filter, select, options = { skip: 0, limit: entity_constant_1.MAX_RETURN_RECORD }, relations = [], transformOptions = {}) {
         return __awaiter(this, void 0, void 0, function* () {
             const { skip, limit } = options;

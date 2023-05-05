@@ -1,0 +1,75 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @upper on FIELD_DEFINITION
+
+type CardSerializer {
+  cardId: Int!
+  order: Int!
+  content: String!
+}
+
+type ListSerializer {
+  listId: Int!
+  name: String!
+  order: Int!
+  cards: [CardSerializer!]!
+}
+
+type BoardSerializer {
+  boardId: Int!
+  userId: Int!
+  name: String!
+  lists: [ListSerializer!]!
+}
+
+type UserSerializer {
+  userId: Int!
+  email: String!
+}
+
+type LoginType {
+  createdAt: Date!
+  updatedAt: Date!
+  accessToken: String!
+  user: UserSerializer!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type Query {
+  boards(skip: Int! = 0, limit: Int! = 10, filter: BoardFilterInput): [BoardSerializer!]!
+  me: UserSerializer!
+}
+
+input BoardFilterInput {
+  boardId: Int
+  name: String
+}
+
+type Mutation {
+  createBoard(input: CreateBoardInput!): BoardSerializer!
+  updateBoard(input: UpdateBoardInput!): BoardSerializer!
+  deleteBoard(input: DeleteBoardInput!): Boolean!
+  login(input: LoginInput!): LoginType!
+}
+
+input CreateBoardInput {
+  name: String!
+}
+
+input UpdateBoardInput {
+  name: String!
+  boardId: Int!
+}
+
+input DeleteBoardInput {
+  boardId: Int!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
